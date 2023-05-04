@@ -149,7 +149,7 @@ public class PresumedReport {
         } else if (file1.exists() && file0.exists()) {
 
             File[] files = new File(path).listFiles();
-            assert files != null;
+            if (files == null) return fileName0;
             Arrays.sort(files, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 
             int number = -1;

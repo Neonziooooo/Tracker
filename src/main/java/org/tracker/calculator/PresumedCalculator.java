@@ -16,9 +16,9 @@ public class PresumedCalculator {
 
     public void calculateDuplicateValuesSum(List<Invoice> oldList) {
         for (Invoice invoice : oldList) {
-            if (!"1000".equals(invoice.getBranch()) ||
-                    !"00 - Documento regular".equals(invoice.getSituation()) ||
-                    !isValidCFOP(invoice.getCfop()) ||
+            if (!"1000".equals(invoice.getBranch()) &&
+                    !isValidDocument(invoice) &&
+                    !isValidCFOP(invoice.getCfop()) &&
                     invoice.getPartner().isEmpty()) {
                 continue;
             }
@@ -28,6 +28,14 @@ public class PresumedCalculator {
             if (optionalInvoice.isEmpty()) PresumedReport.getFrontInvoices().add(invoice);
         }
         PresumedReport.getBackInvoices().addAll(oldList);
+    }
+
+    private boolean isValidDocument(Invoice invoice) {
+        return "00 - Documento regular".equals(invoice.getSituation()) ||
+                "01 - Documento Regular Extemporâneo".equals(invoice.getSituation()) ||
+                "06 - Documento Fiscal Complementar".equals(invoice.getSituation()) ||
+                "07 - Documento Fiscal Complementar Extemporâneo".equals(invoice.getSituation()) ||
+                "08 - Documento Fiscal emitido com base em Regime Especial ou Norma Específica".equals(invoice.getSituation());
     }
 
     public BigDecimal gradeCalculation(Invoice invoice) {
